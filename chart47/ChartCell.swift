@@ -18,6 +18,7 @@ class ChartCell: UITableViewCell, FrameDelegate {
         let mini = loadChart(i) // todo: copy
         self.chart = ChartRef(value: chart)
         self.mini = ChartRef(value: mini)
+        
         super.init(style: .default, reuseIdentifier: nil)
     }
     
@@ -71,6 +72,8 @@ class ChartCell: UITableViewCell, FrameDelegate {
         miniView.frame = CGRect(x: miniOffset, y: chartHeight + spaceHeight, width: w - 2*miniOffset, height: miniHeight)
         frameView.frame = CGRect(x: miniView.frame.origin.x, y: miniView.frame.origin.y - borderHeight, width: miniView.frame.width, height: miniView.frame.height + 2*borderHeight)
         zoomButton.frame = CGRect(x: w - 100, y: 0, width: 100, height: 50)
+        
+        changeFrame(offset: frameView.currentFrame().offset, width: frameView.currentFrame().length)
     }
     
     var zoomed = false
@@ -88,21 +91,23 @@ class ChartCell: UITableViewCell, FrameDelegate {
         }
     }
 
+    //        srcOffset
+    //        srcWidth
+    //        dstOffset
+    //        dstWidth
+    //        chartView
     func zoomIn() {
         guard let dayIndex = selectedDayIndex else { return }
+        
         let chartParams = chart.value.setDetailedAndPretendBrief(dayIndex..<dayIndex+1, currentFrame: frameView.currentFrame())
-//        srcOffset
-//        srcWidth
-//        dstOffset
-//        dstWidth
-//        chartView
         let miniParams = mini.value.setDetailedAndPretendBrief(dayIndex-3..<dayIndex+4, currentFrame: Frame(offset: 0, length: 1))
+        
         run(views: [(chartView, chartParams), (miniView, miniParams)]) {
             self.chart.value.setBrief()
             self.chart.value.setDetailed(dayIndex-3..<dayIndex+4)
         }
     }
-
+    
     func zoomOut() {
         let chartParams = chart.value.animationParamsToReturnToBrief(frameToReturn: frameView.currentFrame())
         let miniParams = mini.value.animationParamsToReturnToBrief(frameToReturn: Frame(offset: 0, length: 1))

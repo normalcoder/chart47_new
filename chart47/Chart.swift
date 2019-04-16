@@ -174,10 +174,9 @@ extension Chart {
         assert(detailedState != nil)
         let s = detailedState!
         
-        
         return Animation.Params(
             range: s.newRange,
-            fromValue: Animated(pieces: s.newFinal, verticalFrame: verticalFrameForHorizontal(frameToReturn), frame: frameToReturn),
+            fromValue: Animated(pieces: s.newFinal, verticalFrame: verticalFrameForPieces(s.newFinal), frame: horizontalFrameForPieces(s.newFinal)),
             toValue: Animated(pieces: s.new, verticalFrame: verticalFrameForHorizontal(frameToReturn), frame: frameToReturn)
         )
     }

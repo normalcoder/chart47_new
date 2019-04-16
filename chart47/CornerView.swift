@@ -1,6 +1,6 @@
 import UIKit
 
-let cornerColor = UIColor.lightGray
+let cornerColor = UIColor.lightGray.withAlphaComponent(0.7)
 
 class CornerView: UIView {
     let isLeft: Bool
